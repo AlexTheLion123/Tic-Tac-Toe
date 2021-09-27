@@ -1,15 +1,23 @@
 <script>
     import Gameboard from '$lib/Gameboard'
+    import Button from '$lib/components/Button.svelte'
+    import { tick } from 'svelte'
     
     const myGame = new Gameboard();
     
-    function tileClickHandler(position) {
+    async function tileClickHandler(position) {
         try {
-            myGame.move(position)
+            myGame.move(position);
+            myGame.board = myGame.board;
+            await tick();
+            if(myGame.checkWon()){
+                alert("The game has been won")
+                myGame.reset();
+            }
+
         } catch(e) {
             alert(e)
         }
-        myGame.board = myGame.board
     }
 
 </script>
@@ -21,6 +29,11 @@
         </div>    
     {/each}
 </div>
+
+<Button on:reset={() => {
+    myGame.reset();
+    myGame.board = myGame.board
+}}/>
 
 <style>
     .board {

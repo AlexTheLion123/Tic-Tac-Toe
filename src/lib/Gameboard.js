@@ -1,5 +1,4 @@
 import Player from '$lib/Player';
-// import { board } from '$lib/stores'
 
 // Gameboard object
 export default function Gameboard() {
@@ -19,33 +18,19 @@ Gameboard.prototype.move = function(position) {
     if(this.counter%2==0) {
         this.Player1.move(position);
         this.board[position] = "X";
-        // board.update(arr => arr[i]="X")
-
-        if(this.Player1.checkWon(this.Player1.moves)){
-            alert("Player1 has won the game");
-            this.reset()
-            isWon = true;
-        }
-        
     } else {
         this.Player2.move(position);
         this.board[position] = "O"
         
-        if(this.Player2.checkWon(this.Player2.moves)){
-            alert("Player2 has won the game");
-            this.reset()
-            isWon = true
-        }
     }
-    if(!isWon) this.counter++;
+    this.counter++;
 }
 
 Gameboard.prototype.checkWon = function(){
     if(this.counter<5){
         return false;
     }
-
-    const isWon = this.counter%2==0 ? this.Player1.checkWon(this.board) : this.Player2.checkWon(this.board)
+    const isWon = this.counter%2==1 ? this.Player1.checkWon(this.Player1.moves) : this.Player2.checkWon(this.Player2.moves)
     if(isWon==true){
         return true
     } else {
