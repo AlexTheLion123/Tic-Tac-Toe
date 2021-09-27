@@ -1,4 +1,5 @@
-import Player from '$lib/Player'
+import Player from '$lib/Player';
+// import { board } from '$lib/stores'
 
 // Gameboard object
 export default function Gameboard() {
@@ -6,7 +7,7 @@ export default function Gameboard() {
     this.counter = 0;
 
     this.Player1 = new Player();
-    this.Player2 = new Player();
+    this.Player2 = new Player();   
     
 }
 
@@ -14,32 +15,29 @@ Gameboard.prototype.move = function(position) {
     if(this.board[position]) {
         throw "Someone has already moved there"
     }
-    // if(this.lastPlayer == player) {
-    //     throw "Its not your turn"
-    // }
+    let isWon = false;
     if(this.counter%2==0) {
         this.Player1.move(position);
         this.board[position] = "X";
-        
-        const isWon = this.Player1.checkWon();
-        if(isWon==true){
+        // board.update(arr => arr[i]="X")
+
+        if(this.Player1.checkWon(this.Player1.moves)){
             alert("Player1 has won the game");
             this.reset()
+            isWon = true;
         }
-    
+        
     } else {
         this.Player2.move(position);
         this.board[position] = "O"
         
-        const isWon = this.Player2.checkWon();
-        if(isWon==true){
+        if(this.Player2.checkWon(this.Player2.moves)){
             alert("Player2 has won the game");
             this.reset()
+            isWon = true
         }
     }
-    this.counter++;
-    
-    console.log(this.board);
+    if(!isWon) this.counter++;
 }
 
 Gameboard.prototype.checkWon = function(){
@@ -47,7 +45,7 @@ Gameboard.prototype.checkWon = function(){
         return false;
     }
 
-    const isWon = this.counter%2==0 ? this.Player1.checkWon() : this.Player2.checkWon()
+    const isWon = this.counter%2==0 ? this.Player1.checkWon(this.board) : this.Player2.checkWon(this.board)
     if(isWon==true){
         return true
     } else {
@@ -56,5 +54,8 @@ Gameboard.prototype.checkWon = function(){
 }
 
 Gameboard.prototype.reset = function() {
-    this.board = this.board = Array(9).join(".").split(".");
+    this.board = Array(9).join(".").split(".");
+    this.counter = 0;
+    this.Player1 = new Player();
+    this.Player2 = new Player(); 
 }

@@ -1,13 +1,13 @@
 <script>
     import Gameboard from '$lib/Gameboard'
+    
     const myGame = new Gameboard();
-    // myGame.board;
-
-    function tileClickHandler(e, position) {
+    
+    function tileClickHandler(position) {
         try {
             myGame.move(position)
-        } catch {
-            alert("Someone has already moved there")
+        } catch(e) {
+            alert(e)
         }
         myGame.board = myGame.board
     }
@@ -16,7 +16,7 @@
 
 <div class="board">
     {#each Array(9) as tile, i}
-        <div class="tile" on:click={e => tileClickHandler(e,i)}>
+        <div class="tile" on:click={() => tileClickHandler(i)}>
             {myGame.board[i]}
         </div>    
     {/each}
